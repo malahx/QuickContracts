@@ -1,0 +1,13 @@
+﻿KeyDeclineSelectedContract = x
+KeyDeclineAllContracts = c
+KeyDeclineAllTest = v
+KeyAcceptSelectedContract = a
+TestContracts = true
+RescueContracts = true
+ScienceDataContracts = true
+SurveyContracts = true
+StationContracts = true
+BaseContracts = true
+SatelliteContracts = true
+ISRUContracts = true
+ARMContracts = true

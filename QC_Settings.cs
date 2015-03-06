@@ -21,20 +21,20 @@ using System.IO;
 using UnityEngine;
 
 namespace QuickContracts {
-	public class Settings : Quick {
+	public class QSettings : Quick {
 
-		public static Settings Instance = new Settings ();
+		public static QSettings Instance = new QSettings ();
 
 		private string File_settings = KSPUtil.ApplicationRootPath + "GameData/" + MOD + "/Config.txt";
 
 		[Persistent]
-		internal string KeyDeclineSelectedContract = "x";
+		internal KeyCode KeyDeclineSelectedContract;
 		[Persistent]
-		internal string KeyDeclineAllContracts = "c";
+		internal KeyCode KeyDeclineAllContracts;
 		[Persistent]
-		internal string KeyDeclineAllTest = "v";
+		internal KeyCode KeyDeclineAllTest;
 		[Persistent]
-		internal string KeyAcceptSelectedContract = "a";
+		internal KeyCode KeyAcceptSelectedContract;
 		[Persistent]
 		internal bool TestContracts = true;
 		[Persistent]
@@ -53,13 +53,33 @@ namespace QuickContracts {
 		internal bool ISRUContracts = true;
 		[Persistent]
 		internal bool ARMContracts = true;
+		[Persistent]
+		internal bool PlantFlagContracts = true;
+		[Persistent]
+		internal bool AltitudeRecordContracts = true;
+		[Persistent]
+		internal bool ExploreBodyContracts = true;
+		[Persistent]
+		internal bool FirstLaunchContracts = true;
+		[Persistent]
+		internal bool GrandTourContracts = true;
+		[Persistent]
+		internal bool OrbitKerbinContracts = true;
+		[Persistent]
+		internal bool ReachSpaceContracts = true;
 
+		public void Save() {
+			ConfigNode _temp = ConfigNode.CreateConfigFromObject(this, new ConfigNode());
+			_temp.Save(File_settings);
+			Quick.Log ("Save");
+		}
 		public void Load() {
 			if (File.Exists (File_settings)) {
 				ConfigNode _temp = ConfigNode.Load (File_settings);
 				ConfigNode.LoadObjectFromConfig (this, _temp);
-				Log("Load");
-				return;
+				Quick.Log ("Load");
+			} else {
+				Save ();
 			}
 		}
 	}

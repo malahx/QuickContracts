@@ -23,104 +23,68 @@ using System.IO;
 using UnityEngine;
 
 namespace QuickContracts {
-
-	public class Quick : MonoBehaviour {
-		public readonly static string VERSION = "0.10";
-		public readonly static string MOD = "QuickContracts";
-		private static bool isdebug = true;
-
-		// Afficher les messages sur la console
-		internal static void Log(string _string) {
-			if (isdebug) {
-				Debug.Log (MOD + "(" + VERSION + "): " + _string);
-			}
-		}
-		internal static void Warning(string _string) {
-			if (isdebug) {
-				Debug.LogWarning (MOD + "(" + VERSION + "): " + _string);
-			}
-		}
-	}
-
 	[KSPAddon(KSPAddon.Startup.EveryScene, false)]
 	public class QuickContracts : Quick {
 
-		// CHARGER LA CONFIGURATION ET DESACTIVER LES CONTRATS
+		private void Awake() {
+			if (HighLogic.LoadedSceneIsGame) {
+				if (HighLogic.CurrentGame.Mode != Game.Modes.CAREER) {
+					AutoDestroy ();
+					return;
+				}
+			}
+			QGUI.Awake ();
+			QShortCuts.Awake ();
+		}
+
 		private void Start() {
-			Settings.Instance.Load ();
-			GameEvents.onGUIMissionControlSpawn.Add (OnGUIMissionControlSpawn);
-			GameEvents.Contract.onContractsLoaded.Add (OnContractsLoaded);
+			if (HighLogic.LoadedSceneIsGame) {
+				if (HighLogic.CurrentGame.Mode == Game.Modes.CAREER) {
+					QSettings.Instance.Load ();
+					QShortCuts.VerifyKey ();
+					GameEvents.onGUIMissionControlSpawn.Add (OnGUIMissionControlSpawn);
+					GameEvents.onGUIMissionControlDespawn.Add (OnGUIMissionControlDespawn);
+					GameEvents.Contract.onContractsLoaded.Add (OnContractsLoaded);
+				}
+			}
+		}
+
+		private void AutoDestroy() {
+			Quick.Warning ("Can't work on Sandbox.");
+			Destroy (this);
 		}
 
 		private void OnDestroy() {
-			GameEvents.onGUIMissionControlSpawn.Remove (OnGUIMissionControlSpawn);
-			GameEvents.Contract.onContractsLoaded.Remove (OnContractsLoaded);
+			if (HighLogic.LoadedSceneIsGame) {
+				if (HighLogic.CurrentGame.Mode == Game.Modes.CAREER) {
+					GameEvents.onGUIMissionControlSpawn.Remove (OnGUIMissionControlSpawn);
+					GameEvents.onGUIMissionControlDespawn.Remove (OnGUIMissionControlDespawn);
+					GameEvents.Contract.onContractsLoaded.Remove (OnContractsLoaded);
+				}
+			}
 		}
 
 		private void OnGUIMissionControlSpawn() {
-			Settings.Instance.Load ();
+			QSettings.Instance.Load ();
 			OnContractsLoaded ();
 		}
 
+		private void OnGUIMissionControlDespawn() {
+			QSettings.Instance.Save ();
+		}
+
 		private void OnContractsLoaded() {
-			if (!Settings.Instance.TestContracts) {
-				QContracts.DisableContract(typeof(Contracts.Templates.PartTest));
-			}
-			if (!Settings.Instance.RescueContracts) {
-				QContracts.DisableContract(typeof(Contracts.Templates.RescueKerbal));
-			}
-			if (!Settings.Instance.ScienceDataContracts) {
-				QContracts.DisableContract(typeof(Contracts.Templates.CollectScience));
-			}
-			if (!Settings.Instance.SurveyContracts) {
-				QContracts.DisableContract(typeof(FinePrint.Contracts.SurveyContract));
-			}
-			if (!Settings.Instance.StationContracts) {
-				QContracts.DisableContract(typeof(FinePrint.Contracts.StationContract));
-			}
-			if (!Settings.Instance.BaseContracts) {
-				QContracts.DisableContract(typeof(FinePrint.Contracts.BaseContract));
-			}
-			if (!Settings.Instance.SatelliteContracts) {
-				QContracts.DisableContract(typeof(FinePrint.Contracts.SatelliteContract));
-			}
-			if (!Settings.Instance.ISRUContracts) {
-				QContracts.DisableContract(typeof(FinePrint.Contracts.ISRUContract));
-			}
-			if (!Settings.Instance.ARMContracts) {
-				QContracts.DisableContract(typeof(FinePrint.Contracts.ARMContract));
-			}
+			QContracts.DisableContract ();
 		}
 
 		private void Update() {
-			if (HighLogic.LoadedScene == GameScenes.SPACECENTER) {
-				if (MissionControl.Instance != null) {
-					bool _accept = Input.GetKeyDown (Settings.Instance.KeyAcceptSelectedContract);
-					bool _decline = Input.GetKeyDown (Settings.Instance.KeyDeclineSelectedContract);
-					if (_accept || _decline) {
-						if (MissionControl.Instance.scrollListAvailable.LastClickedControl != null) {
-							MissionControl.MissionSelection _mission = (MissionControl.MissionSelection)MissionControl.Instance.scrollListAvailable.LastClickedControl.Data;
-							Contract _contract = _mission.contract;
-							MissionControl.Instance.scrollListAvailable.RemoveItem (_mission.listItem.container, false);
-							if (_accept) {
-								_contract.Accept ();
-								MissionControl.Instance.AddItemActive (_contract);
-								Log ("Accept: " + _contract.Title);
-							} else if (_decline) {
-								_contract.Decline ();
-								Log ("Decline: " + _contract.Title);
-							}
-							QContracts.Clear ();
-						}
-					}
-					if (Input.GetKeyDown (Settings.Instance.KeyDeclineAllContracts)) {
-						QContracts.DeclineAll ();
-					}
-					if (Input.GetKeyDown (Settings.Instance.KeyDeclineAllTest)) {
-						QContracts.DeclineAll (typeof(Contracts.Templates.PartTest));
-					}
-				}
-			}
+			QShortCuts.Update ();
+		}
+
+		private void OnGUI() {
+			GUI.skin = HighLogic.Skin;
+			QShortCuts.OnGUI ();
+			QGUI.OnGUI ();
 		}
 	}
 }

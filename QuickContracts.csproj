@@ -8,6 +8,7 @@
     <RootNamespace>QuickContracts</RootNamespace>
     <AssemblyName>QuickContracts</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ReleaseVersion>0.11</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,6 +47,10 @@
     <Compile Include="QC.cs" />
     <Compile Include="QC_Settings.cs" />
     <Compile Include="QC_Contracts.cs" />
+    <Compile Include="QC_GUI.cs" />
+    <Compile Include="QC_Key.cs" />
+    <Compile Include="QC_ShortCuts.cs" />
+    <Compile Include="QC_Quick.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -53,7 +58,6 @@
     <None Include="QuickContracts.version" />
     <None Include="README.md" />
     <None Include="GameData\QuickContracts\COPYING" />
-    <None Include="GameData\QuickContracts\Config.txt" />
     <None Include="GameData\QuickContracts\QuickContracts.version" />
     <None Include="GameData\QuickContracts\README.md" />
     <None Include="GameData\QuickContracts\Plugins\QuickContracts.dll" />

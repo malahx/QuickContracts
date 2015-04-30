@@ -48,8 +48,6 @@ namespace QuickContracts {
 				}
 				bool _accept = Input.GetKeyDown (QSettings.Instance.KeyAcceptSelectedContract) && MissionControl.Instance.btnAccept.controlState == UIButton.CONTROL_STATE.NORMAL;
 				bool _decline = Input.GetKeyDown (QSettings.Instance.KeyDeclineSelectedContract) && MissionControl.Instance.btnDecline.controlState == UIButton.CONTROL_STATE.NORMAL;
-				//Warning ("MissionControl.Instance.statsTextField.Text " + MissionControl.Instance.statsTextField.Text);
-
 				if (_accept || _decline) {
 					QContracts.AcceptOrDecline (_accept);
 				}

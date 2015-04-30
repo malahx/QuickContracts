@@ -8,7 +8,7 @@
     <RootNamespace>QuickContracts</RootNamespace>
     <AssemblyName>QuickContracts</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <ReleaseVersion>0.11</ReleaseVersion>
+    <ReleaseVersion>0.21</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,10 +36,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\lib\0.90\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\lib\1.00\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\lib\0.90\UnityEngine.dll</HintPath>
+      <HintPath>..\lib\1.00\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -61,8 +61,10 @@
     <None Include="GameData\QuickContracts\QuickContracts.version" />
     <None Include="GameData\QuickContracts\README.md" />
     <None Include="GameData\QuickContracts\Plugins\QuickContracts.dll" />
+    <None Include="GameData\QuickContracts\Textures\Settings.dds" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GameData\" />
+    <Folder Include="GameData\QuickContracts\Textures\" />
   </ItemGroup>
 </Project>

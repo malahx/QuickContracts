@@ -76,57 +76,6 @@ namespace QuickContracts {
 			}
 		}
 
-		internal static void DisableContract() {
-			if (!QSettings.Instance.TestContracts) {
-				QContracts.DisableContract(typeof(Contracts.Templates.PartTest));
-			}
-			if (!QSettings.Instance.RescueContracts) {
-				QContracts.DisableContract(typeof(Contracts.Templates.RescueKerbal));
-			}
-			if (!QSettings.Instance.ScienceDataContracts) {
-				QContracts.DisableContract(typeof(Contracts.Templates.CollectScience));
-			}
-			if (!QSettings.Instance.PlantFlagContracts) {
-				QContracts.DisableContract(typeof(Contracts.Templates.PlantFlag));
-			}
-			if (!QSettings.Instance.AltitudeRecordContracts) {
-				QContracts.DisableContract(typeof(Contracts.Templates.AltitudeRecord));
-			}
-			if (!QSettings.Instance.ExploreBodyContracts) {
-				QContracts.DisableContract(typeof(Contracts.Templates.ExploreBody));
-			}
-			if (!QSettings.Instance.FirstLaunchContracts) {
-				QContracts.DisableContract(typeof(Contracts.Templates.FirstLaunch));
-			}
-			if (!QSettings.Instance.GrandTourContracts) {
-				QContracts.DisableContract(typeof(Contracts.Templates.GrandTour));
-			}
-			if (!QSettings.Instance.OrbitKerbinContracts) {
-				QContracts.DisableContract(typeof(Contracts.Templates.OrbitKerbin));
-			}
-			if (!QSettings.Instance.ReachSpaceContracts) {
-				QContracts.DisableContract(typeof(Contracts.Templates.ReachSpace));
-			}
-			if (!QSettings.Instance.SurveyContracts) {
-				QContracts.DisableContract(typeof(FinePrint.Contracts.SurveyContract));
-			}
-			if (!QSettings.Instance.StationContracts) {
-				QContracts.DisableContract(typeof(FinePrint.Contracts.StationContract));
-			}
-			if (!QSettings.Instance.BaseContracts) {
-				QContracts.DisableContract(typeof(FinePrint.Contracts.BaseContract));
-			}
-			if (!QSettings.Instance.SatelliteContracts) {
-				QContracts.DisableContract(typeof(FinePrint.Contracts.SatelliteContract));
-			}
-			if (!QSettings.Instance.ISRUContracts) {
-				QContracts.DisableContract(typeof(FinePrint.Contracts.ISRUContract));
-			}
-			if (!QSettings.Instance.ARMContracts) {
-				QContracts.DisableContract(typeof(FinePrint.Contracts.ARMContract));
-			}
-		}
-
 		internal static void DisableContract(Type ContractType) {
 			if (ContractSystem.ContractTypes.Contains (ContractType)) {
 				ContractSystem.ContractTypes.Remove (ContractType);

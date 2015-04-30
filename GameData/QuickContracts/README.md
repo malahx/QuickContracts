@@ -1,5 +1,5 @@
 ﻿#### QuickContracts
-#### A plugin for Kerbal Space Program 0.90.0
+#### A plugin for Kerbal Space Program 1.0.0
 #### Copyright 2015 Malah
 
 This program is free software: you can redistribute it and/or modify
@@ -30,11 +30,22 @@ Keyboard's shortcuts:
 
 Unzip all files. Put the QuickContracts folder in your KSP/GameData folder.
 
+#### How to update it?
+
+Unzip all files. Merge the new QuickContracts folder with the old folder which is in your KSP/GameData folder.
+
 #### How to uninstall it?
 
 Delete the QuickContracts folder in your KSP/GameData folder.
 
 #### Changelog
+
+v1.00 - 2015.04.30
+* Fix: Deletes useless features on which I will not work,
+* Fix: Converted textures to DDS,
+* Fix: Corrected the loading of the config file (thanks Tarheel1999),
+* Fix: Some minor bug,
+* Updated to KSP 1.00
 
 v0.20 - 2015.03.06
 * New: Added a GUI for the config of the shortcuts, 

@@ -42,9 +42,7 @@ namespace QuickContracts {
 				if (HighLogic.CurrentGame.Mode == Game.Modes.CAREER) {
 					QSettings.Instance.Load ();
 					QShortCuts.VerifyKey ();
-					GameEvents.onGUIMissionControlSpawn.Add (OnGUIMissionControlSpawn);
 					GameEvents.onGUIMissionControlDespawn.Add (OnGUIMissionControlDespawn);
-					GameEvents.Contract.onContractsLoaded.Add (OnContractsLoaded);
 				}
 			}
 		}
@@ -57,24 +55,13 @@ namespace QuickContracts {
 		private void OnDestroy() {
 			if (HighLogic.LoadedSceneIsGame) {
 				if (HighLogic.CurrentGame.Mode == Game.Modes.CAREER) {
-					GameEvents.onGUIMissionControlSpawn.Remove (OnGUIMissionControlSpawn);
 					GameEvents.onGUIMissionControlDespawn.Remove (OnGUIMissionControlDespawn);
-					GameEvents.Contract.onContractsLoaded.Remove (OnContractsLoaded);
 				}
 			}
 		}
 
-		private void OnGUIMissionControlSpawn() {
-			QSettings.Instance.Load ();
-			OnContractsLoaded ();
-		}
-
 		private void OnGUIMissionControlDespawn() {
 			QSettings.Instance.Save ();
-		}
-
-		private void OnContractsLoaded() {
-			QContracts.DisableContract ();
 		}
 
 		private void Update() {

@@ -25,7 +25,7 @@ namespace QuickContracts {
 
 		public static QSettings Instance = new QSettings ();
 
-		private string File_settings = KSPUtil.ApplicationRootPath + "GameData/" + MOD + "/Config.txt";
+		private string FileConfig = KSPUtil.ApplicationRootPath + "GameData/" + MOD + "/Config.txt";
 
 		[Persistent]
 		internal KeyCode KeyDeclineSelectedContract;
@@ -35,49 +35,21 @@ namespace QuickContracts {
 		internal KeyCode KeyDeclineAllTest;
 		[Persistent]
 		internal KeyCode KeyAcceptSelectedContract;
-		[Persistent]
-		internal bool TestContracts = true;
-		[Persistent]
-		internal bool RescueContracts = true;
-		[Persistent]
-		internal bool ScienceDataContracts = true;
-		[Persistent]
-		internal bool SurveyContracts = true;
-		[Persistent]
-		internal bool StationContracts = true;
-		[Persistent]
-		internal bool BaseContracts = true;
-		[Persistent]
-		internal bool SatelliteContracts = true;
-		[Persistent]
-		internal bool ISRUContracts = true;
-		[Persistent]
-		internal bool ARMContracts = true;
-		[Persistent]
-		internal bool PlantFlagContracts = true;
-		[Persistent]
-		internal bool AltitudeRecordContracts = true;
-		[Persistent]
-		internal bool ExploreBodyContracts = true;
-		[Persistent]
-		internal bool FirstLaunchContracts = true;
-		[Persistent]
-		internal bool GrandTourContracts = true;
-		[Persistent]
-		internal bool OrbitKerbinContracts = true;
-		[Persistent]
-		internal bool ReachSpaceContracts = true;
 
 		public void Save() {
 			ConfigNode _temp = ConfigNode.CreateConfigFromObject(this, new ConfigNode());
-			_temp.Save(File_settings);
-			Quick.Log ("Save");
+			_temp.Save(FileConfig);
+			Quick.Log ("Settings Saved");
 		}
 		public void Load() {
-			if (File.Exists (File_settings)) {
-				ConfigNode _temp = ConfigNode.Load (File_settings);
-				ConfigNode.LoadObjectFromConfig (this, _temp);
-				Quick.Log ("Load");
+			if (File.Exists (FileConfig)) {
+				try {
+					ConfigNode _temp = ConfigNode.Load (FileConfig);
+					ConfigNode.LoadObjectFromConfig (this, _temp);
+				} catch {
+					Save ();
+				}
+				Quick.Log ("Settings Loaded");
 			} else {
 				Save ();
 			}

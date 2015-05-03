@@ -1,5 +1,5 @@
 ﻿#### QuickContracts
-#### A plugin for Kerbal Space Program 1.0.0
+#### A plugin for Kerbal Space Program 1.0.2
 #### Copyright 2015 Malah
 
 This program is free software: you can redistribute it and/or modify
@@ -39,6 +39,9 @@ Unzip all files. Merge the new QuickContracts folder with the old folder which i
 Delete the QuickContracts folder in your KSP/GameData folder.
 
 #### Changelog
+
+v1.01 - 2015.05.03
+* Updated to KSP 1.02
 
 v1.00 - 2015.04.30
 * Fix: Deletes useless features on which I will not work,

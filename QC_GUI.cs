@@ -16,9 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 */
 
-using Contracts;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace QuickContracts {
@@ -27,50 +25,51 @@ namespace QuickContracts {
 
 		internal static bool WindowSettings = false;
 		private static string Settings_TexturePath = Quick.MOD + "/Textures/Settings";
-		private static Texture2D Settings_Texture;
-
-		internal static void Awake() {
-			Settings_Texture = GameDatabase.Instance.GetTexture (Settings_TexturePath, false);
+		private static Texture2D Settings_Texture {
+			get {
+				return GameDatabase.Instance.GetTexture (Settings_TexturePath, false);
+			}
 		}
 
 		internal static bool isMissionControl {
 			get {
-				return HighLogic.LoadedSceneIsGame && HighLogic.CurrentGame.Mode == Game.Modes.CAREER && HighLogic.LoadedScene == GameScenes.SPACECENTER && MissionControl.Instance != null;
+				return MissionControl.Instance != null;
 			}
 		}
 
 		// AFFICHAGE DE L'INTERFACE
 		internal static void OnGUI() {
-				if (isMissionControl) {
-				// Bouton de configuration
-				GUILayout.BeginArea (new Rect (478, 182, 22, 22));
-				if (GUILayout.Button (new GUIContent (Settings_Texture, "QuickContracts"), GUILayout.Width(22), GUILayout.Height(22))) {
-					QContracts.CleanLists ();
-					QContracts.Clear();
-					WindowSettings = !WindowSettings;
+			if (!isMissionControl) {
+				return;
+			}
+			// Bouton de configuration
+			GUILayout.BeginArea (new Rect (478, 182, 22, 22));
+			if (GUILayout.Button (new GUIContent (Settings_Texture, "QuickContracts"), GUILayout.Width (22), GUILayout.Height (22))) {
+				QuickContracts.CleanLists ();
+				QuickContracts.Clear ();
+				WindowSettings = !WindowSettings;
+			}
+			GUILayout.EndArea ();
+			if (QuickContracts.isClean) {
+				if (WindowSettings) {
+					GUILayout.BeginArea (new Rect (515, 180, 465, 45));
+					GUILayout.Box ("QuickContracts", GUILayout.Height (30));
+					GUILayout.EndArea ();
+					GUILayout.BeginArea (new Rect (515, 215, 595 / 2, Screen.height - 5));
+					GUILayout.BeginVertical ();
+					GUILayout.BeginHorizontal ();
+					GUILayout.Box ("Shortcuts", GUILayout.Height (30));
+					GUILayout.EndHorizontal ();
+					GUILayout.Space (5);
+					QShortCuts.DrawConfigKey (QShortCuts.Key.AcceptSelectedContract);
+					QShortCuts.DrawConfigKey (QShortCuts.Key.DeclineSelectedContract);
+					QShortCuts.DrawConfigKey (QShortCuts.Key.DeclineAllContracts);
+					QShortCuts.DrawConfigKey (QShortCuts.Key.DeclineAllTest);
+					GUILayout.EndVertical ();
+					GUILayout.EndArea ();
 				}
-				GUILayout.EndArea ();
-				if (QContracts.isClean) {
-					if (WindowSettings) {
-						GUILayout.BeginArea (new Rect (515, 180, 465, 45));
-						GUILayout.Box ("QuickContracts", GUILayout.Height (30));
-						GUILayout.EndArea ();
-						GUILayout.BeginArea (new Rect (515, 215, 595 / 2, Screen.height - 5));
-						GUILayout.BeginVertical ();
-						GUILayout.BeginHorizontal ();
-						GUILayout.Box ("Shortcuts", GUILayout.Height (30));
-						GUILayout.EndHorizontal ();
-						GUILayout.Space (5);
-						QShortCuts.DrawConfigKey (QShortCuts.Key.AcceptSelectedContract);
-						QShortCuts.DrawConfigKey (QShortCuts.Key.DeclineSelectedContract);
-						QShortCuts.DrawConfigKey (QShortCuts.Key.DeclineAllContracts);
-						QShortCuts.DrawConfigKey (QShortCuts.Key.DeclineAllTest);
-						GUILayout.EndVertical ();
-						GUILayout.EndArea ();
-					}
-				} else if (WindowSettings) {
-					WindowSettings = false;
-				}
+			} else if (WindowSettings) {
+				WindowSettings = false;
 			}
 		}
 	}

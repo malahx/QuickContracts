@@ -23,39 +23,40 @@ namespace QuickContracts {
 	public class QShortCuts : QKey {
 
 		internal static void Awake() {
-			if (HighLogic.LoadedSceneIsGame) {
-				RectSetKey = new Rect ((Screen.width - 300)/2, (Screen.height - 100)/2, 300, 100);
-				string[] _keys = Enum.GetNames (typeof(Key));
-				int _length = _keys.Length;
-				for (int _key = 1; _key < _length; _key++) {
-					Key _GetKey = (Key)_key;
-					SetCurrentKey (_GetKey, DefaultKey (_GetKey));
-				}
+			RectSetKey = new Rect ((Screen.width - 300) / 2, (Screen.height - 100) / 2, 300, 100);
+			string[] _keys = Enum.GetNames (typeof(Key));
+			int _length = _keys.Length;
+			for (int _key = 1; _key < _length; _key++) {
+				Key _GetKey = (Key)_key;
+				SetCurrentKey (_GetKey, DefaultKey (_GetKey));
 			}
 		}
 
 		internal static void Update() {
 			if (QGUI.isMissionControl) {
 				if (SetKey != Key.None) {
-					KeyCode _key = GetKeyPressed ();
-					if (_key != KeyCode.None) {
-						SetCurrentKey (SetKey, _key);
-						QSettings.Instance.Save ();
-						SetKey = Key.None;
-						QGUI.WindowSettings = true;
+					if (Event.current.isKey) {
+						KeyCode _key = Event.current.keyCode;
+						if (_key != KeyCode.None) {
+							SetCurrentKey (SetKey, _key);
+							QSettings.Instance.Save ();
+							SetKey = Key.None;
+							QGUI.WindowSettings = true;
+						}
 					}
 					return;
 				}
-				bool _accept = Input.GetKeyDown (QSettings.Instance.KeyAcceptSelectedContract) && MissionControl.Instance.btnAccept.controlState == UIButton.CONTROL_STATE.NORMAL;
-				bool _decline = Input.GetKeyDown (QSettings.Instance.KeyDeclineSelectedContract) && MissionControl.Instance.btnDecline.controlState == UIButton.CONTROL_STATE.NORMAL;
-				if (_accept || _decline) {
-					QContracts.AcceptOrDecline (_accept);
+				if (Input.GetKeyDown (QSettings.Instance.KeyAcceptSelectedContract)) {
+					QuickContracts.Accept ();
 				}
+				if (Input.GetKeyDown (QSettings.Instance.KeyDeclineSelectedContract)) {
+					QuickContracts.Decline ();
+				}					
 				if (Input.GetKeyDown (QSettings.Instance.KeyDeclineAllContracts)) {
-					QContracts.DeclineAll ();
+					QuickContracts.DeclineAll ();
 				}
 				if (Input.GetKeyDown (QSettings.Instance.KeyDeclineAllTest)) {
-					QContracts.DeclineAll (typeof(Contracts.Templates.PartTest));
+					QuickContracts.DeclineAll (typeof(Contracts.Templates.PartTest));
 				}
 			}
 		}

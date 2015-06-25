@@ -21,11 +21,11 @@ using System.IO;
 using UnityEngine;
 
 namespace QuickContracts {
-	public class QSettings : Quick {
+	public class QSettings : MonoBehaviour {
 
 		public static QSettings Instance = new QSettings ();
 
-		private string FileConfig = KSPUtil.ApplicationRootPath + "GameData/" + MOD + "/Config.txt";
+		private string FileConfig = KSPUtil.ApplicationRootPath + "GameData/" + Quick.MOD + "/Config.txt";
 
 		[Persistent]
 		internal KeyCode KeyDeclineSelectedContract;

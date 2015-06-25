@@ -16,48 +16,36 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 */
 
-using Contracts;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 namespace QuickContracts {
-	[KSPAddon(KSPAddon.Startup.EveryScene, false)]
-	public class QuickContracts : Quick {
+	[KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
+	public partial class QuickContracts : Quick {
+
+		public static QuickContracts Instance {
+			get;
+			private set;
+		}
 
 		private void Awake() {
-			if (HighLogic.LoadedSceneIsGame) {
-				if (HighLogic.CurrentGame.Mode != Game.Modes.CAREER) {
-					AutoDestroy ();
-					return;
-				}
+			if (Instance != null || HighLogic.CurrentGame.Mode != Game.Modes.CAREER) {
+				Warning ("Destroy");
+				Destroy (this);
+				return;
 			}
-			QGUI.Awake ();
+			Instance = this;
 			QShortCuts.Awake ();
 		}
 
 		private void Start() {
-			if (HighLogic.LoadedSceneIsGame) {
-				if (HighLogic.CurrentGame.Mode == Game.Modes.CAREER) {
-					QSettings.Instance.Load ();
-					QShortCuts.VerifyKey ();
-					GameEvents.onGUIMissionControlDespawn.Add (OnGUIMissionControlDespawn);
-				}
-			}
-		}
-
-		private void AutoDestroy() {
-			Quick.Warning ("Can't work on Sandbox.");
-			Destroy (this);
+			QSettings.Instance.Load ();
+			QShortCuts.VerifyKey ();
+			GameEvents.onGUIMissionControlDespawn.Add (OnGUIMissionControlDespawn);
 		}
 
 		private void OnDestroy() {
-			if (HighLogic.LoadedSceneIsGame) {
-				if (HighLogic.CurrentGame.Mode == Game.Modes.CAREER) {
-					GameEvents.onGUIMissionControlDespawn.Remove (OnGUIMissionControlDespawn);
-				}
-			}
+			GameEvents.onGUIMissionControlDespawn.Remove (OnGUIMissionControlDespawn);
 		}
 
 		private void OnGUIMissionControlDespawn() {

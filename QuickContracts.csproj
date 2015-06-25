@@ -8,7 +8,10 @@
     <RootNamespace>QuickContracts</RootNamespace>
     <AssemblyName>QuickContracts</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <ReleaseVersion>1.01</ReleaseVersion>
+    <ReleaseVersion>1.02</ReleaseVersion>
+    <Description>#### QuickContracts
+#### A plugin for Kerbal Space Program 1.0.2
+#### Copyright 2015 Malah</Description>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +24,6 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
@@ -35,11 +37,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\lib\1.02\Assembly-CSharp.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\lib\1.02\UnityEngine.dll</HintPath>
+      <HintPath>..\lib\1.0.4\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\lib\1.0.4\Assembly-CSharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

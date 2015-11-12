@@ -2,12 +2,12 @@
 	"NAME": "QuickContracts",
 	"URL": "https://raw.githubusercontent.com/malahx/QuickContracts/master/QuickContracts.version",
 	"CHANGE_LOG_URL": "https://raw.githubusercontent.com/malahx/QuickContracts/master/README.md", 
-	"DOWNLOAD": "https://kerbalstuff.com/mod/539/QuickContracts"
-	"VERSION":{"MAJOR":1,"MINOR":0,"PATCH":2,"BUILD":0},
+	"DOWNLOAD": "https://kerbalstuff.com/mod/539/QuickContracts",
+	"VERSION":{"MAJOR":1,"MINOR":0,"PATCH":3,"BUILD":0},
     "KSP_VERSION": {
         "MAJOR": 1,
         "MINOR": 0,
-        "PATCH": 4
+        "PATCH": 5
     },
     "KSP_VERSION_MIN": {
         "MAJOR": 1,

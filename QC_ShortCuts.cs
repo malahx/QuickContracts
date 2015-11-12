@@ -33,39 +33,41 @@ namespace QuickContracts {
 		}
 
 		internal static void Update() {
-			if (QGUI.isMissionControl) {
-				if (SetKey != Key.None) {
-					if (Event.current.isKey) {
-						KeyCode _key = Event.current.keyCode;
-						if (_key != KeyCode.None) {
-							SetCurrentKey (SetKey, _key);
-							QSettings.Instance.Save ();
-							SetKey = Key.None;
-							QGUI.WindowSettings = true;
-						}
+			if (!QGUI.isMissionControl) {
+				return;
+			}
+			if (SetKey != Key.None) {
+				if (Event.current.isKey) {
+					KeyCode _key = Event.current.keyCode;
+					if (_key != KeyCode.None) {
+						SetCurrentKey (SetKey, _key);
+						QSettings.Instance.Save ();
+						SetKey = Key.None;
+						QGUI.WindowSettings = true;
 					}
-					return;
 				}
-				if (Input.GetKeyDown (QSettings.Instance.KeyAcceptSelectedContract)) {
-					QuickContracts.Accept ();
-				}
-				if (Input.GetKeyDown (QSettings.Instance.KeyDeclineSelectedContract)) {
-					QuickContracts.Decline ();
-				}					
-				if (Input.GetKeyDown (QSettings.Instance.KeyDeclineAllContracts)) {
-					QuickContracts.DeclineAll ();
-				}
-				if (Input.GetKeyDown (QSettings.Instance.KeyDeclineAllTest)) {
-					QuickContracts.DeclineAll (typeof(Contracts.Templates.PartTest));
-				}
+				return;
+			}
+			if (Input.GetKeyDown (QSettings.Instance.KeyAcceptSelectedContract)) {
+				QuickContracts.Accept ();
+			}
+			if (Input.GetKeyDown (QSettings.Instance.KeyDeclineSelectedContract)) {
+				QuickContracts.Decline ();
+			}					
+			if (Input.GetKeyDown (QSettings.Instance.KeyDeclineAllContracts)) {
+				QuickContracts.DeclineAll ();
+			}
+			if (Input.GetKeyDown (QSettings.Instance.KeyDeclineAllTest)) {
+				QuickContracts.DeclineAll (typeof(Contracts.Templates.PartTest));
 			}
 		}
 
 		internal static void OnGUI() {
 			if (QGUI.isMissionControl) {
-				if (SetKey != Key.None) {
-					RectSetKey = GUILayout.Window (1545146, RectSetKey, DrawSetKey, string.Format ("Set Key: {0}", GetText (SetKey)), GUILayout.Width (RectSetKey.width), GUILayout.ExpandHeight (true));
-				}
+				return;
+			}
+			if (SetKey != Key.None) {
+				RectSetKey = GUILayout.Window (1545146, RectSetKey, DrawSetKey, string.Format ("Set Key: {0}", GetText (SetKey)), GUILayout.Width (RectSetKey.width), GUILayout.ExpandHeight (true));
 			}
 		}
 	}

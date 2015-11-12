@@ -40,6 +40,13 @@ Delete the QuickContracts folder in your KSP/GameData folder.
 
 #### Changelog
 
+v1.03 - 2015.11.12
+* New: Added a message to see how many times you have declined contracts and lost reputations.
+* Fix: Enhanced the position of the GUI to fit with others resolutions,
+* Fix: Corrected the limit of the accepted contracts (Custom Barn Kit compatibility),
+* Fix: Some minor bug,
+* Compiled against KSP 1.0.5
+
 v1.02 - 2015.06.25
 * New: Added a button to return to the default key assignment,
 * Fix: Corrected the key assignment to accept special's key,

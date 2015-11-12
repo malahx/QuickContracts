@@ -23,7 +23,10 @@ using UnityEngine;
 
 namespace QuickContracts {
 
-	public partial class QuickContracts : Quick {
+	public partial class QuickContracts : MonoBehaviour {
+
+		internal static float declineCost = 0;
+		internal static float declineContracts = 0;
 
 		internal static bool isClean {
 			get {
@@ -38,26 +41,36 @@ namespace QuickContracts {
 			if (MissionControl.Instance == null) {
 				return;
 			}
-			if (MissionControl.Instance.btnAccept.controlState != UIButton.CONTROL_STATE.NORMAL) {
+			if (!MissionControl.Instance.missionInfoPanelButtons.isActiveAndEnabled || MissionControl.Instance.btnAccept.controlState != UIButton.CONTROL_STATE.NORMAL || MissionControl.Instance.btnAccept.IsHidden() || !MissionControl.Instance.btnAccept.controlIsEnabled) {
+				return;
+			}
+			int _active = ContractSystem.Instance.Contracts.FindAll (c => c.ContractState == Contract.State.Active).Count;
+			int _accept = GameVariables.Instance.GetActiveContractsLimit (ScenarioUpgradeableFacilities.GetFacilityLevel (SpaceCenterFacility.MissionControl));
+			if (_active >= _accept) {
+				Log ("You can't accept a new contract, you have " + _active + " active contracts and you can accept " + _accept + " contracts.");
 				return;
 			}
 			POINTER_INFO _pinfo = new POINTER_INFO ();
 			_pinfo.evt = POINTER_INFO.INPUT_EVENT.TAP;
+			_pinfo.type = POINTER_INFO.POINTER_TYPE.MOUSE;
 			MissionControl.Instance.btnAccept.OnInput (_pinfo);
-			Log ("Accepted a new contract");
+			Log ("Accepted a contract");
 		}
 
 		internal static void Decline() {
 			if (MissionControl.Instance == null) {
 				return;
 			}
-			if (MissionControl.Instance.btnDecline.controlState != UIButton.CONTROL_STATE.NORMAL) {
+			if (!MissionControl.Instance.missionInfoPanelButtons.isActiveAndEnabled || MissionControl.Instance.btnDecline.controlState != UIButton.CONTROL_STATE.NORMAL || MissionControl.Instance.btnDecline.IsHidden() || !MissionControl.Instance.btnDecline.controlIsEnabled) {
 				return;
 			}
 			POINTER_INFO _pinfo = new POINTER_INFO ();
 			_pinfo.evt = POINTER_INFO.INPUT_EVENT.TAP;
+			_pinfo.type = POINTER_INFO.POINTER_TYPE.MOUSE;
 			MissionControl.Instance.btnDecline.OnInput (_pinfo);
-			Log ("Declined an old contract");
+			declineCost += HighLogic.CurrentGame.Parameters.Career.RepLossDeclined;
+			declineContracts++;
+			Log ("Declined a contract");
 		}
 
 		internal static void DeclineAll(Type ContractType) {
@@ -65,8 +78,11 @@ namespace QuickContracts {
 				return;
 			}
 			List<Contract> _contracts = ContractSystem.Instance.Contracts;
-			foreach (Contract _contract in _contracts) {
+			for (int i = 0; i < _contracts.Count; i++) {
+				Contract _contract = _contracts [i];
 				if (_contract.ContractState == Contract.State.Offered && _contract.CanBeDeclined () && _contract.GetType() == ContractType) {
+					declineCost += HighLogic.CurrentGame.Parameters.Career.RepLossDeclined;
+					declineContracts++;
 					_contract.Decline ();
 				}
 			}
@@ -80,8 +96,11 @@ namespace QuickContracts {
 				return;
 			}
 			List<Contract> _contracts = ContractSystem.Instance.Contracts;
-			foreach (Contract _contract in _contracts) {
+			for (int i = 0; i < _contracts.Count; i++) {
+				Contract _contract = _contracts [i];
 				if (_contract.ContractState == Contract.State.Offered && _contract.CanBeDeclined ()) {
+					declineCost += HighLogic.CurrentGame.Parameters.Career.RepLossDeclined;
+					declineContracts++;
 					_contract.Decline ();
 				}
 			}

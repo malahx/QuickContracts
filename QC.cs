@@ -21,7 +21,7 @@ using UnityEngine;
 
 namespace QuickContracts {
 	[KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
-	public partial class QuickContracts : Quick {
+	public partial class QuickContracts : MonoBehaviour {
 
 		public static QuickContracts Instance {
 			get;
@@ -50,6 +50,12 @@ namespace QuickContracts {
 
 		private void OnGUIMissionControlDespawn() {
 			QSettings.Instance.Save ();
+			if (QSettings.Instance.EnableMessage && declineCost > 0 && declineContracts > 0 & MessageSystem.Ready) {
+				string _string = string.Format ("You have declined <b><#FF0000>{0}</></b> contract(s).\nIt has cost you <#E0D503>¡<b>{1}</b></>", declineContracts, declineCost);
+				MessageSystem.Instance.AddMessage (new MessageSystem.Message (MOD, _string, MessageSystemButton.MessageButtonColor.ORANGE, MessageSystemButton.ButtonIcons.ALERT));
+				declineContracts = 0;
+				declineCost = 0;
+			}
 		}
 
 		private void Update() {

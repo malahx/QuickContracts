@@ -25,7 +25,7 @@ namespace QuickContracts {
 
 		public static QSettings Instance = new QSettings ();
 
-		private string FileConfig = KSPUtil.ApplicationRootPath + "GameData/" + Quick.MOD + "/Config.txt";
+		private string FileConfig = KSPUtil.ApplicationRootPath + "GameData/" + QuickContracts.MOD + "/Config.txt";
 
 		[Persistent]
 		internal KeyCode KeyDeclineSelectedContract;
@@ -35,11 +35,13 @@ namespace QuickContracts {
 		internal KeyCode KeyDeclineAllTest;
 		[Persistent]
 		internal KeyCode KeyAcceptSelectedContract;
+		[Persistent]
+		internal bool EnableMessage = true;
 
 		public void Save() {
 			ConfigNode _temp = ConfigNode.CreateConfigFromObject(this, new ConfigNode());
 			_temp.Save(FileConfig);
-			Quick.Log ("Settings Saved");
+			QuickContracts.Log ("Settings Saved");
 		}
 		public void Load() {
 			if (File.Exists (FileConfig)) {
@@ -49,7 +51,7 @@ namespace QuickContracts {
 				} catch {
 					Save ();
 				}
-				Quick.Log ("Settings Loaded");
+				QuickContracts.Log ("Settings Loaded");
 			} else {
 				Save ();
 			}

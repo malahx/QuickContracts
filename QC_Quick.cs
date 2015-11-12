@@ -21,7 +21,7 @@ using System.Reflection;
 using UnityEngine;
 
 namespace QuickContracts {
-	public class Quick : MonoBehaviour {
+	public partial class QuickContracts : MonoBehaviour {
 		public readonly static string VERSION = Assembly.GetAssembly(typeof(QuickContracts)).GetName().Version.Major + "." + Assembly.GetAssembly(typeof(QuickContracts)).GetName().Version.Minor + Assembly.GetAssembly(typeof(QuickContracts)).GetName().Version.Build;
 		public readonly static string MOD = Assembly.GetAssembly(typeof(QuickContracts)).GetName().Name;
 

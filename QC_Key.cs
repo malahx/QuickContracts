@@ -79,7 +79,7 @@ namespace QuickContracts {
 			try {
 				Input.GetKey(CurrentKey(key));
 			} catch {
-				Quick.Warning ("Wrong key: " + CurrentKey(key));
+				QuickContracts.Warning ("Wrong key: " + CurrentKey(key));
 				SetCurrentKey (key, DefaultKey(key));
 			}
 		}
@@ -109,41 +109,41 @@ namespace QuickContracts {
 		}
 
 		internal static void DrawSetKey(int id) {
-		GUILayout.BeginVertical ();
-		GUILayout.BeginHorizontal ();
-		GUILayout.Label (string.Format("Press a key to select the <color=#FFFFFF><b>{0}</b></color>",GetText(SetKey)));
-		GUILayout.EndHorizontal();
-		GUILayout.Space(5);
-		GUILayout.BeginHorizontal();
-		if (GUILayout.Button ("Clear Assignment", GUILayout.ExpandWidth(true), GUILayout.Height (30))) {
-		SetCurrentKey (SetKey, KeyCode.None);
-		SetKey = Key.None;
-		QGUI.WindowSettings = true;
-		}
-		if (GUILayout.Button ("Default Assignment", GUILayout.ExpandWidth(true), GUILayout.Height (30))) {
-		SetCurrentKey (SetKey, DefaultKey(SetKey));
-		SetKey = Key.None;
-		QGUI.WindowSettings = true;
-		}
-		if (GUILayout.Button ("Cancel Assignment", GUILayout.ExpandWidth(true), GUILayout.Height (30))) {
-		SetKey = Key.None;
-		QGUI.WindowSettings = true;
-		}
-		GUILayout.EndHorizontal();
-		GUILayout.Space(5);
-		GUILayout.EndVertical ();
+			GUILayout.BeginVertical ();
+			GUILayout.BeginHorizontal ();
+			GUILayout.Label (string.Format ("Press a key to select the <color=#FFFFFF><b>{0}</b></color>", GetText (SetKey)));
+			GUILayout.EndHorizontal ();
+			GUILayout.Space (5);
+			GUILayout.BeginHorizontal ();
+			if (GUILayout.Button ("Clear Assignment", GUILayout.ExpandWidth (true), GUILayout.Height (30))) {
+				SetCurrentKey (SetKey, KeyCode.None);
+				SetKey = Key.None;
+				QGUI.WindowSettings = true;
+			}
+			if (GUILayout.Button ("Default Assignment", GUILayout.ExpandWidth (true), GUILayout.Height (30))) {
+				SetCurrentKey (SetKey, DefaultKey (SetKey));
+				SetKey = Key.None;
+				QGUI.WindowSettings = true;
+			}
+			if (GUILayout.Button ("Cancel Assignment", GUILayout.ExpandWidth (true), GUILayout.Height (30))) {
+				SetKey = Key.None;
+				QGUI.WindowSettings = true;
+			}
+			GUILayout.EndHorizontal ();
+			GUILayout.Space (5);
+			GUILayout.EndVertical ();
 		}
 
 		internal static void DrawConfigKey(Key key) {
-		GUILayout.BeginHorizontal();
-		GUILayout.Label (string.Format("{0}: <color=#FFFFFF><b>{1}</b></color>", GetText(key), CurrentKey(key)), GUILayout.Width (250));
-		GUILayout.Space(5);
-		if (GUILayout.Button ("Set", GUILayout.Width (25), GUILayout.Height (20))) {
-		SetKey = key;
-		QGUI.WindowSettings = false;
-		}
-		GUILayout.EndHorizontal();
-		GUILayout.Space(5);
+			GUILayout.BeginHorizontal ();
+			GUILayout.Label (string.Format ("{0}: <color=#FFFFFF><b>{1}</b></color>", GetText (key), CurrentKey (key)), GUILayout.Width (250));
+			GUILayout.Space (5);
+			if (GUILayout.Button ("Set", GUILayout.Width (25), GUILayout.Height (20))) {
+				SetKey = key;
+				QGUI.WindowSettings = false;
+			}
+			GUILayout.EndHorizontal ();
+			GUILayout.Space (5);
 		}
 	}
 }

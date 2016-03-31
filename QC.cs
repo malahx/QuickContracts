@@ -62,7 +62,7 @@ namespace QuickContracts {
 		private void OnGUIMissionControlDespawn() {
 			QSettings.Instance.Save ();
 			if (QSettings.Instance.EnableMessage && declineCost > 0 && declineContracts > 0 & MessageSystem.Ready) {
-				string _string = string.Format ("You have declined <b><color=#FF0000>{0}</></b> contract(s).\nIt has cost you <color=#E0D503>¡<b>{1}</b></>", declineContracts, declineCost);
+				string _string = string.Format ("You have declined <b><color=#FF0000>{0}</color></b> contract(s).\nIt has cost you <color=#E0D503>¡<b>{1}</b></color>", declineContracts, declineCost);
 				MessageSystem.Instance.AddMessage (new MessageSystem.Message (MOD, _string, MessageSystemButton.MessageButtonColor.ORANGE, MessageSystemButton.ButtonIcons.ALERT));
 				declineContracts = 0;
 				declineCost = 0;

@@ -1,6 +1,6 @@
 ﻿/* 
 QuickContracts
-Copyright 2015 Malah
+Copyright 2016 Malah
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 */
 
+using KSP.UI.Screens;
 using System;
 using UnityEngine;
 
@@ -33,10 +34,10 @@ namespace QuickContracts {
 		}
 
 		internal static void Update() {
-			if (!QGUI.isMissionControl) {
+			if (MissionControl.Instance == null) {
 				return;
 			}
-			if (SetKey != Key.None) {
+			/*if (SetKey != Key.None) {
 				if (Event.current.isKey) {
 					KeyCode _key = Event.current.keyCode;
 					if (_key != KeyCode.None) {
@@ -47,7 +48,7 @@ namespace QuickContracts {
 					}
 				}
 				return;
-			}
+			}*/
 			if (Input.GetKeyDown (QSettings.Instance.KeyAcceptSelectedContract)) {
 				QuickContracts.Accept ();
 			}
@@ -62,13 +63,13 @@ namespace QuickContracts {
 			}
 		}
 
-		internal static void OnGUI() {
+		/*internal static void OnGUI() {
 			if (QGUI.isMissionControl) {
 				return;
 			}
 			if (SetKey != Key.None) {
 				RectSetKey = GUILayout.Window (1545146, RectSetKey, DrawSetKey, string.Format ("Set Key: {0}", GetText (SetKey)), GUILayout.Width (RectSetKey.width), GUILayout.ExpandHeight (true));
 			}
-		}
+		}*/
 	}
 }

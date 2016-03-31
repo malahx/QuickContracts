@@ -1,6 +1,6 @@
 ﻿/* 
 QuickContracts
-Copyright 2015 Malah
+Copyright 2016 Malah
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -108,7 +108,7 @@ namespace QuickContracts {
 			}
 		}
 
-		internal static void DrawSetKey(int id) {
+		/*internal static void DrawSetKey(int id) {
 			GUILayout.BeginVertical ();
 			GUILayout.BeginHorizontal ();
 			GUILayout.Label (string.Format ("Press a key to select the <color=#FFFFFF><b>{0}</b></color>", GetText (SetKey)));
@@ -144,6 +144,6 @@ namespace QuickContracts {
 			}
 			GUILayout.EndHorizontal ();
 			GUILayout.Space (5);
-		}
+		}*/
 	}
 }

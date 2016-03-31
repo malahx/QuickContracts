@@ -1,6 +1,6 @@
 ﻿/* 
 QuickContracts
-Copyright 2015 Malah
+Copyright 2016 Malah
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 */
 
+using KSP.UI.Screens;
 using System;
 using UnityEngine;
 
@@ -42,6 +43,16 @@ namespace QuickContracts {
 			QSettings.Instance.Load ();
 			QShortCuts.VerifyKey ();
 			GameEvents.onGUIMissionControlDespawn.Add (OnGUIMissionControlDespawn);
+			GameEvents.Contract.onDeclined.Add (OnDeclined);
+		}
+
+		private void OnDeclined(Contracts.Contract contract) {
+			if (MissionControl.Instance == null) {
+				return;
+			}
+			declineCost += HighLogic.CurrentGame.Parameters.Career.RepLossDeclined;
+			declineContracts++;
+			Log ("A contract has been declined!");
 		}
 
 		private void OnDestroy() {
@@ -51,7 +62,7 @@ namespace QuickContracts {
 		private void OnGUIMissionControlDespawn() {
 			QSettings.Instance.Save ();
 			if (QSettings.Instance.EnableMessage && declineCost > 0 && declineContracts > 0 & MessageSystem.Ready) {
-				string _string = string.Format ("You have declined <b><#FF0000>{0}</></b> contract(s).\nIt has cost you <#E0D503>¡<b>{1}</b></>", declineContracts, declineCost);
+				string _string = string.Format ("You have declined <b><color=#FF0000>{0}</></b> contract(s).\nIt has cost you <color=#E0D503>¡<b>{1}</b></>", declineContracts, declineCost);
 				MessageSystem.Instance.AddMessage (new MessageSystem.Message (MOD, _string, MessageSystemButton.MessageButtonColor.ORANGE, MessageSystemButton.ButtonIcons.ALERT));
 				declineContracts = 0;
 				declineCost = 0;
@@ -60,12 +71,6 @@ namespace QuickContracts {
 
 		private void Update() {
 			QShortCuts.Update ();
-		}
-
-		private void OnGUI() {
-			GUI.skin = HighLogic.Skin;
-			QShortCuts.OnGUI ();
-			QGUI.OnGUI ();
 		}
 	}
 }

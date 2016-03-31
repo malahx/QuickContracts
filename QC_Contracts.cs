@@ -1,6 +1,6 @@
 ﻿/* 
 QuickContracts
-Copyright 2015 Malah
+Copyright 2016 Malah
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,10 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 */
 
+using KSP.UI.Screens;
 using Contracts;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace QuickContracts {
 
@@ -28,20 +31,16 @@ namespace QuickContracts {
 		internal static float declineCost = 0;
 		internal static float declineContracts = 0;
 
-		internal static bool isClean {
-			get {
-				if (MissionControl.Instance == null) {
-					return false;	
-				}
-				return MissionControl.Instance.scrollListAvailable.LastClickedControl == null && MissionControl.Instance.scrollListActive.LastClickedControl == null && MissionControl.Instance.scrollListCancelled.LastClickedControl == null && MissionControl.Instance.scrollListCompleted.LastClickedControl == null && MissionControl.Instance.scrollListFailed.LastClickedControl == null && MissionControl.Instance.scrollListFinished.LastClickedControl == null;
-			}
-		}
-
 		internal static void Accept() {
 			if (MissionControl.Instance == null) {
 				return;
 			}
-			if (!MissionControl.Instance.missionInfoPanelButtons.isActiveAndEnabled || MissionControl.Instance.btnAccept.controlState != UIButton.CONTROL_STATE.NORMAL || MissionControl.Instance.btnAccept.IsHidden() || !MissionControl.Instance.btnAccept.controlIsEnabled) {
+			if (!MissionControl.Instance.toggleDisplayModeAvailable.isOn) {
+				Log ("You are not on the Available contracts");
+				return;
+			}
+			if (!MissionControl.Instance.btnAccept.IsInteractable()) {
+				Log ("Can't accept this contract");
 				return;
 			}
 			int _active = ContractSystem.Instance.Contracts.FindAll (c => c.ContractState == Contract.State.Active).Count;
@@ -50,10 +49,7 @@ namespace QuickContracts {
 				Log ("You can't accept a new contract, you have " + _active + " active contracts and you can accept " + _accept + " contracts.");
 				return;
 			}
-			POINTER_INFO _pinfo = new POINTER_INFO ();
-			_pinfo.evt = POINTER_INFO.INPUT_EVENT.TAP;
-			_pinfo.type = POINTER_INFO.POINTER_TYPE.MOUSE;
-			MissionControl.Instance.btnAccept.OnInput (_pinfo);
+			MissionControl.Instance.btnAccept.onClick.Invoke ();
 			Log ("Accepted a contract");
 		}
 
@@ -61,19 +57,25 @@ namespace QuickContracts {
 			if (MissionControl.Instance == null) {
 				return;
 			}
-			if (!MissionControl.Instance.missionInfoPanelButtons.isActiveAndEnabled || MissionControl.Instance.btnDecline.controlState != UIButton.CONTROL_STATE.NORMAL || MissionControl.Instance.btnDecline.IsHidden() || !MissionControl.Instance.btnDecline.controlIsEnabled) {
+			if (!MissionControl.Instance.toggleDisplayModeAvailable.isOn) {
+				Log ("You are not on the Available contracts");
 				return;
 			}
-			POINTER_INFO _pinfo = new POINTER_INFO ();
-			_pinfo.evt = POINTER_INFO.INPUT_EVENT.TAP;
-			_pinfo.type = POINTER_INFO.POINTER_TYPE.MOUSE;
-			MissionControl.Instance.btnDecline.OnInput (_pinfo);
-			declineCost += HighLogic.CurrentGame.Parameters.Career.RepLossDeclined;
-			declineContracts++;
+			if (!MissionControl.Instance.btnDecline.IsInteractable()) {
+				return;
+			}
+			MissionControl.Instance.btnDecline.onClick.Invoke ();
 			Log ("Declined a contract");
 		}
 
 		internal static void DeclineAll(Type ContractType) {
+			if (MissionControl.Instance == null) {
+				return;
+			}
+			if (!MissionControl.Instance.toggleDisplayModeAvailable.isOn) {
+				Log ("You are not on the Available contracts");
+				return;
+			}
 			if (ContractSystem.Instance == null) {
 				return;
 			}
@@ -81,17 +83,21 @@ namespace QuickContracts {
 			for (int i = 0; i < _contracts.Count; i++) {
 				Contract _contract = _contracts [i];
 				if (_contract.ContractState == Contract.State.Offered && _contract.CanBeDeclined () && _contract.GetType() == ContractType) {
-					declineCost += HighLogic.CurrentGame.Parameters.Career.RepLossDeclined;
-					declineContracts++;
 					_contract.Decline ();
 				}
 			}
-			Clear ();
-			CleanLists (true);
+			MissionControl.Instance.RebuildContractList ();
 			Log ("Decline all: " + ContractType.Name);
 		}
 
 		internal static void DeclineAll() {
+			if (MissionControl.Instance == null) {
+				return;
+			}
+			if (!MissionControl.Instance.toggleDisplayModeAvailable.isOn) {
+				Log ("You are not on the Available contracts");
+				return;
+			}
 			if (ContractSystem.Instance == null) {
 				return;
 			}
@@ -99,58 +105,11 @@ namespace QuickContracts {
 			for (int i = 0; i < _contracts.Count; i++) {
 				Contract _contract = _contracts [i];
 				if (_contract.ContractState == Contract.State.Offered && _contract.CanBeDeclined ()) {
-					declineCost += HighLogic.CurrentGame.Parameters.Career.RepLossDeclined;
-					declineContracts++;
 					_contract.Decline ();
 				}
 			}
-			Clear ();
-			CleanLists (true);
+			MissionControl.Instance.RebuildContractList ();
 			Log ("Decline all contracts");
-		}
-
-		internal static void Clear() {
-			if (MissionControl.Instance == null) {
-				return;
-			}
-			MissionControl.Instance.UpdateInfoPanelContract (null);
-			MissionControl.Instance.UpdateInfoPanelAgent (null);
-			MissionControl.Instance.missionPanelManager.Dismiss (UIPanelManager.MENU_DIRECTION.Forwards);
-		}
-
-		internal static void CleanLists(bool force = false) {
-			if (MissionControl.Instance == null) {
-				return;
-			}
-			if (force || MissionControl.Instance.scrollListAvailable.LastClickedControl != null || MissionControl.Instance.scrollListActive.LastClickedControl != null) {
-				MissionControl.Instance.scrollListAvailable.ClearList (true);
-				MissionControl.Instance.scrollListActive.ClearList (true);
-				List<Contract> _contracts = ContractSystem.Instance.Contracts;
-				foreach (Contract _contract in _contracts) {
-					if (_contract.ContractState == Contract.State.Active) {
-						MissionControl.Instance.AddItemActive (_contract);
-					} else if (_contract.ContractState == Contract.State.Offered) {
-						MissionControl.Instance.AddItemAvailable (_contract);
-					}
-				}
-			}
-			if (force || MissionControl.Instance.scrollListCancelled.LastClickedControl != null || MissionControl.Instance.scrollListCompleted.LastClickedControl != null || MissionControl.Instance.scrollListFailed.LastClickedControl != null || MissionControl.Instance.scrollListFinished.LastClickedControl != null) {
-				MissionControl.Instance.scrollListCancelled.ClearList (true);
-				MissionControl.Instance.scrollListCompleted.ClearList (true);
-				MissionControl.Instance.scrollListFailed.ClearList (true);
-				MissionControl.Instance.scrollListFinished.ClearList (true);
-				List<Contract> _contracts = ContractSystem.Instance.ContractsFinished;
-				foreach (Contract _contract in _contracts) {
-					if (_contract.ContractState == Contract.State.Completed) {
-						MissionControl.Instance.AddItemCompleted (_contract);
-					} else if (_contract.ContractState == Contract.State.Failed) {
-						MissionControl.Instance.AddItemFailed (_contract);
-					} else if (_contract.ContractState == Contract.State.Cancelled) {
-						MissionControl.Instance.AddItemCancelled (_contract);
-					}
-					MissionControl.Instance.AddItemFinished (_contract, _contract.Title);
-				}
-			}
 		}
 	}
 }

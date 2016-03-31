@@ -1,6 +1,6 @@
 ﻿#### QuickContracts
-#### A plugin for Kerbal Space Program 1.0.X
-#### Copyright 2015 Malah
+#### A plugin for Kerbal Space Program
+#### Copyright 2016 Malah
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -39,6 +39,11 @@ Unzip all files. Merge the new QuickContracts folder with the old folder which i
 Delete the QuickContracts folder in your KSP/GameData folder.
 
 #### Changelog
+
+v1.04-pre - 2016.03.30
+* New: Deleted all GUI,
+* New: All contract declined on the MissionControl will count to the message send at the close of MissionControl,
+* Compiled against KSP 1.1.0.1172
 
 v1.03 - 2015.11.12
 * New: Added a message to see how many times you have declined contracts and lost reputations.
@@ -84,7 +89,7 @@ v0.10 - 2015.01.27
 #### Links
 
 * http://forum.kerbalspaceprogram.com/threads/95168#QuickContracts
-* https://kerbalstuff.com/mod/539/QuickContracts
+* http://spacedock.info/mod/104/QuickContracts
 * http://kerbal.curseforge.com/ksp-mods/227337-quickcontracts
 * https://github.com/malahx/QuickContracts
 * Mission Controller 2: http://forum.kerbalspaceprogram.com/threads/43645

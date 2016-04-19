@@ -40,6 +40,9 @@ Delete the QuickContracts folder in your KSP/GameData folder.
 
 #### Changelog
 
+v1.05 - 2016.04.19
+* Compiled against KSP 1.1.0.1230
+
 v1.04-pre - 2016.03.30
 * New: Deleted all GUI,
 * New: All contract declined on the MissionControl will count to the message send at the close of MissionControl,

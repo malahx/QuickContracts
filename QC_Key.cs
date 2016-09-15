@@ -16,16 +16,15 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 */
 
-using System;
 using UnityEngine;
 
 namespace QuickContracts {
-	public class QKey {
+	public partial class QGUI {
 	
-		internal static Key SetKey = Key.None;
-		internal static Rect RectSetKey = new Rect();
+		Key SetKey = Key.None;
+		Rect rectSetKey = new Rect();
 
-		internal enum Key {
+		enum Key {
 			None,
 			DeclineSelectedContract,
 			DeclineAllContracts,
@@ -33,7 +32,7 @@ namespace QuickContracts {
 			AcceptSelectedContract
 		}					
 	
-		internal static KeyCode DefaultKey(Key key) {
+		KeyCode DefaultKey(Key key) {
 			switch (key) {
 			case Key.DeclineSelectedContract:
 				return KeyCode.X;
@@ -47,7 +46,7 @@ namespace QuickContracts {
 			return KeyCode.None;
 		}
 
-		internal static string GetText(Key key) {
+		string GetText(Key key) {
 			switch (key) {
 			case Key.DeclineSelectedContract:
 				return "Decline Selected Contract";
@@ -61,7 +60,7 @@ namespace QuickContracts {
 			return string.Empty;
 		}
 
-		internal static KeyCode CurrentKey(Key key) {
+		KeyCode CurrentKey(Key key) {
 			switch (key) {
 			case Key.DeclineSelectedContract:
 				return QSettings.Instance.KeyDeclineSelectedContract;
@@ -75,40 +74,40 @@ namespace QuickContracts {
 			return KeyCode.None;
 		}
 
-		internal static void VerifyKey(Key key) {
+		void VerifyKey(Key key) {
 			try {
 				Input.GetKey(CurrentKey(key));
 			} catch {
-				QuickContracts.Warning ("Wrong key: " + CurrentKey(key));
+				Warning ("Wrong key: " + CurrentKey(key), "QGUI");
 				SetCurrentKey (key, DefaultKey(key));
 			}
 		}
 
-		internal static void VerifyKey() {
+		void VerifyKey() {
 			VerifyKey (Key.DeclineSelectedContract);
 			VerifyKey (Key.DeclineAllContracts);
 			VerifyKey (Key.DeclineAllTest);
 			VerifyKey (Key.AcceptSelectedContract);
 		}
 
-		internal static void SetCurrentKey(Key key, KeyCode CurrentKey) {
+		void SetCurrentKey(Key key, KeyCode currentKey) {
 			switch (key) {
 			case Key.DeclineSelectedContract:
-				QSettings.Instance.KeyDeclineSelectedContract = CurrentKey;
+				QSettings.Instance.KeyDeclineSelectedContract = currentKey;
 				break;
 			case Key.DeclineAllContracts:
-				QSettings.Instance.KeyDeclineAllContracts = CurrentKey;
+				QSettings.Instance.KeyDeclineAllContracts = currentKey;
 				break;
 			case Key.DeclineAllTest:
-				QSettings.Instance.KeyDeclineAllTest = CurrentKey;
+				QSettings.Instance.KeyDeclineAllTest = currentKey;
 				break;
 			case Key.AcceptSelectedContract:
-				QSettings.Instance.KeyAcceptSelectedContract = CurrentKey;
+				QSettings.Instance.KeyAcceptSelectedContract = currentKey;
 				break;
 			}
 		}
 
-		/*internal static void DrawSetKey(int id) {
+		void DrawSetKey(int id) {
 			GUILayout.BeginVertical ();
 			GUILayout.BeginHorizontal ();
 			GUILayout.Label (string.Format ("Press a key to select the <color=#FFFFFF><b>{0}</b></color>", GetText (SetKey)));
@@ -118,32 +117,32 @@ namespace QuickContracts {
 			if (GUILayout.Button ("Clear Assignment", GUILayout.ExpandWidth (true), GUILayout.Height (30))) {
 				SetCurrentKey (SetKey, KeyCode.None);
 				SetKey = Key.None;
-				QGUI.WindowSettings = true;
+				windowSettings = true;
 			}
 			if (GUILayout.Button ("Default Assignment", GUILayout.ExpandWidth (true), GUILayout.Height (30))) {
 				SetCurrentKey (SetKey, DefaultKey (SetKey));
 				SetKey = Key.None;
-				QGUI.WindowSettings = true;
+				windowSettings = true;
 			}
 			if (GUILayout.Button ("Cancel Assignment", GUILayout.ExpandWidth (true), GUILayout.Height (30))) {
 				SetKey = Key.None;
-				QGUI.WindowSettings = true;
+				windowSettings = true;
 			}
 			GUILayout.EndHorizontal ();
 			GUILayout.Space (5);
 			GUILayout.EndVertical ();
 		}
 
-		internal static void DrawConfigKey(Key key) {
+		void DrawConfigKey(Key key) {
 			GUILayout.BeginHorizontal ();
 			GUILayout.Label (string.Format ("{0}: <color=#FFFFFF><b>{1}</b></color>", GetText (key), CurrentKey (key)), GUILayout.Width (250));
-			GUILayout.Space (5);
-			if (GUILayout.Button ("Set", GUILayout.Width (25), GUILayout.Height (20))) {
+			GUILayout.FlexibleSpace();
+			if (GUILayout.Button ("Set", GUILayout.ExpandWidth (true), GUILayout.Height (20))) {
 				SetKey = key;
-				QGUI.WindowSettings = false;
+				windowSettings = false;
 			}
 			GUILayout.EndHorizontal ();
 			GUILayout.Space (5);
-		}*/
+		}
 	}
 }

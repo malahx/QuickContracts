@@ -16,61 +16,53 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 */
 
-using KSP.UI.Screens;
-using System;
+using System.Reflection;
 using UnityEngine;
 
 namespace QuickContracts {
-	[KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
-	public partial class QuickContracts : MonoBehaviour {
 
-		public static QuickContracts Instance {
-			get;
-			private set;
-		}
+	[KSPAddon (KSPAddon.Startup.SpaceCentre, false)]
+	public partial class QGUI : QuickContracts { }
 
-		private void Awake() {
-			if (Instance != null || HighLogic.CurrentGame.Mode != Game.Modes.CAREER) {
-				Warning ("Destroy");
-				Destroy (this);
-				return;
+	public class QuickContracts : MonoBehaviour {
+		
+		public readonly static string VERSION = Assembly.GetExecutingAssembly ().GetName ().Version.Major + "." + Assembly.GetExecutingAssembly ().GetName ().Version.Minor + Assembly.GetExecutingAssembly ().GetName ().Version.Build;
+		public readonly static string MOD = Assembly.GetExecutingAssembly ().GetName ().Name;
+
+		internal static void Log(string String, string Title = null, bool force = false) {
+			if (!force) {
+				if (!QSettings.Instance.Debug) {
+					return;
+				}
 			}
-			Instance = this;
-			QShortCuts.Awake ();
-		}
-
-		private void Start() {
-			QSettings.Instance.Load ();
-			QShortCuts.VerifyKey ();
-			GameEvents.onGUIMissionControlDespawn.Add (OnGUIMissionControlDespawn);
-			GameEvents.Contract.onDeclined.Add (OnDeclined);
-		}
-
-		private void OnDeclined(Contracts.Contract contract) {
-			if (MissionControl.Instance == null) {
-				return;
+			if (Title == null) {
+				Title = MOD;
 			}
-			declineCost += HighLogic.CurrentGame.Parameters.Career.RepLossDeclined;
-			declineContracts++;
-			Log ("A contract has been declined!");
-		}
-
-		private void OnDestroy() {
-			GameEvents.onGUIMissionControlDespawn.Remove (OnGUIMissionControlDespawn);
-		}
-
-		private void OnGUIMissionControlDespawn() {
-			QSettings.Instance.Save ();
-			if (QSettings.Instance.EnableMessage && declineCost > 0 && declineContracts > 0 & MessageSystem.Ready) {
-				string _string = string.Format ("You have declined <b><color=#FF0000>{0}</color></b> contract(s).\nIt has cost you <color=#E0D503>¡<b>{1}</b></color>", declineContracts, declineCost);
-				MessageSystem.Instance.AddMessage (new MessageSystem.Message (MOD, _string, MessageSystemButton.MessageButtonColor.ORANGE, MessageSystemButton.ButtonIcons.ALERT));
-				declineContracts = 0;
-				declineCost = 0;
+			else {
+				Title = string.Format ("{0}({1})", MOD, Title);
 			}
+			Debug.Log (string.Format ("{0}[{1}]: {2}", Title, VERSION, String));
+		}
+		internal static void Warning(string String, string Title = null) {
+			if (Title == null) {
+				Title = MOD;
+			}
+			else {
+				Title = string.Format ("{0}({1})", MOD, Title);
+			}
+			Debug.LogWarning (string.Format ("{0}[{1}]: {2}", Title, VERSION, String));
 		}
 
-		private void Update() {
-			QShortCuts.Update ();
+		protected virtual void Awake() {
+			Log ("Awake");
+		}
+
+		protected virtual void Start() {
+			Log ("Start");
+		}
+
+		protected virtual void OnDestroy() {
+			Log ("OnDestroy");
 		}
 	}
 }

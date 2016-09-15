@@ -16,45 +16,53 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 */
 
-using System;
 using System.IO;
 using UnityEngine;
 
 namespace QuickContracts {
-	public class QSettings : MonoBehaviour {
+	public class QSettings : QuickContracts {
 
-		public static QSettings Instance = new QSettings ();
+		[KSPField (isPersistant = true)]
+		private static readonly QSettings instance = new QSettings ();
+		public static QSettings Instance {
+			get {
+				if (!instance.isLoaded) {
+					instance.Load ();
+				}
+				return instance;
+			}
+		}
+		private string FileConfig = KSPUtil.ApplicationRootPath + "GameData/" + MOD + "/Config.txt";
 
-		private string FileConfig = KSPUtil.ApplicationRootPath + "GameData/" + QuickContracts.MOD + "/Config.txt";
+		[KSPField (isPersistant = true)] private bool isLoaded = false;
 
-		[Persistent]
-		internal KeyCode KeyDeclineSelectedContract;
-		[Persistent]
-		internal KeyCode KeyDeclineAllContracts;
-		[Persistent]
-		internal KeyCode KeyDeclineAllTest;
-		[Persistent]
-		internal KeyCode KeyAcceptSelectedContract;
-		[Persistent]
-		internal bool EnableMessage = true;
+		[Persistent] internal bool Debug = true;
+		[Persistent] internal KeyCode KeyDeclineSelectedContract;
+		[Persistent] internal KeyCode KeyDeclineAllContracts;
+		[Persistent] internal KeyCode KeyDeclineAllTest;
+		[Persistent] internal KeyCode KeyAcceptSelectedContract;
+		[Persistent] internal bool EnableMessage = true;
 
 		public void Save() {
 			ConfigNode _temp = ConfigNode.CreateConfigFromObject(this, new ConfigNode());
 			_temp.Save(FileConfig);
-			QuickContracts.Log ("Settings Saved");
+			Log ("Settings Saved", "QSettings", true);
 		}
 		public void Load() {
 			if (File.Exists (FileConfig)) {
 				try {
 					ConfigNode _temp = ConfigNode.Load (FileConfig);
 					ConfigNode.LoadObjectFromConfig (this, _temp);
-				} catch {
+				}
+				catch {
 					Save ();
 				}
-				QuickContracts.Log ("Settings Loaded");
-			} else {
+				Log ("Settings Loaded", "QSettings", true);
+			}
+			else {
 				Save ();
 			}
+			isLoaded = true;
 		}
 	}
 }

@@ -8,7 +8,7 @@
     <RootNamespace>QuickContracts</RootNamespace>
     <AssemblyName>QuickContracts</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <ReleaseVersion>1.04</ReleaseVersion>
+    <ReleaseVersion></ReleaseVersion>
     <Description>#### QuickContracts
 #### A plugin for Kerbal Space Program
 #### Copyright 2016 Malah</Description>
@@ -41,8 +41,7 @@
     <Compile Include="QC_Settings.cs" />
     <Compile Include="QC_Contracts.cs" />
     <Compile Include="QC_Key.cs" />
-    <Compile Include="QC_ShortCuts.cs" />
-    <Compile Include="QC_Quick.cs" />
+    <Compile Include="QC_GUI.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -63,9 +62,6 @@
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\lib\Managed\Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="KSPUtil">
-      <HintPath>..\lib\Managed\KSPUtil.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <HintPath>..\lib\Managed\System.dll</HintPath>

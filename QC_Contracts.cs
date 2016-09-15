@@ -20,60 +20,88 @@ using KSP.UI.Screens;
 using Contracts;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace QuickContracts {
 
-	public partial class QuickContracts : MonoBehaviour {
+	public partial class QGUI {
 
-		internal static float declineCost = 0;
-		internal static float declineContracts = 0;
+		float declineCost = 0;
+		float declineContracts = 0;
 
-		internal static void Accept() {
+		void OnDeclined(Contracts.Contract contract) {
+			if (MissionControl.Instance == null) {
+				return;
+			}
+			declineCost += HighLogic.CurrentGame.Parameters.Career.RepLossDeclined;
+			declineContracts++;
+			Log ("A contract has been declined!", "QGUI");
+		}
+
+		void OnGUIMissionControlDespawn() {
+			QSettings.Instance.Save ();
+			if (declineCost > 0 && declineContracts > 0 & MessageSystem.Ready) {
+				if (QSettings.Instance.EnableMessage) {
+					string _string = string.Format ("You have declined <b><color=#FF0000>{0}</color></b> contract(s).\nIt has cost you <color=#E0D503>¡<b>{1}</b></color>", declineContracts, declineCost);
+					MessageSystem.Instance.AddMessage (new MessageSystem.Message (MOD, _string, MessageSystemButton.MessageButtonColor.ORANGE, MessageSystemButton.ButtonIcons.ALERT));
+					Log ("Message send.", "QGUI");
+				}
+				declineContracts = 0;
+				declineCost = 0;
+			}
+		}
+
+		void Accept() {
 			if (MissionControl.Instance == null) {
 				return;
 			}
 			if (!MissionControl.Instance.toggleDisplayModeAvailable.isOn) {
-				Log ("You are not on the Available contracts");
+				Log ("You are not on the Available contracts", "QGUI");
+				return;
+			}
+			if (MissionControl.Instance.selectedMission == null) {
+				Log ("There's no selected contract", "QGUI");
 				return;
 			}
 			if (!MissionControl.Instance.btnAccept.IsInteractable()) {
-				Log ("Can't accept this contract");
+				Log ("Can't accept this contract", "QGUI");
 				return;
 			}
-			int _active = ContractSystem.Instance.Contracts.FindAll (c => c.ContractState == Contract.State.Active).Count;
+			int _active = ContractSystem.Instance.GetActiveContractCount ();
 			int _accept = GameVariables.Instance.GetActiveContractsLimit (ScenarioUpgradeableFacilities.GetFacilityLevel (SpaceCenterFacility.MissionControl));
 			if (_active >= _accept) {
-				Log ("You can't accept a new contract, you have " + _active + " active contracts and you can accept " + _accept + " contracts.");
+				Log ("You can't accept a new contract, you have " + _active + " active contracts and you can accept " + _accept + " contracts.", "QGUI");
 				return;
 			}
 			MissionControl.Instance.btnAccept.onClick.Invoke ();
-			Log ("Accepted a contract");
+			Log ("Accepted a contract", "QGUI");
 		}
 
-		internal static void Decline() {
+		void Decline() {
 			if (MissionControl.Instance == null) {
 				return;
 			}
 			if (!MissionControl.Instance.toggleDisplayModeAvailable.isOn) {
-				Log ("You are not on the Available contracts");
+				Log ("You are not on the Available contracts", "QGUI");
+				return;
+			}
+			if (MissionControl.Instance.selectedMission == null) {
+				Log ("There's no selected contract", "QGUI");
 				return;
 			}
 			if (!MissionControl.Instance.btnDecline.IsInteractable()) {
+				Log ("Can't decline this contract", "QGUI");
 				return;
 			}
 			MissionControl.Instance.btnDecline.onClick.Invoke ();
-			Log ("Declined a contract");
+			Log ("Declined a contract", "QGUI");
 		}
 
-		internal static void DeclineAll(Type ContractType) {
+		void DeclineAll(Type ContractType) {
 			if (MissionControl.Instance == null) {
 				return;
 			}
 			if (!MissionControl.Instance.toggleDisplayModeAvailable.isOn) {
-				Log ("You are not on the Available contracts");
+				Log ("You are not on the Available contracts", "QGUI");
 				return;
 			}
 			if (ContractSystem.Instance == null) {
@@ -87,15 +115,15 @@ namespace QuickContracts {
 				}
 			}
 			MissionControl.Instance.RebuildContractList ();
-			Log ("Decline all: " + ContractType.Name);
+			Log ("Decline all: " + ContractType.Name, "QGUI");
 		}
 
-		internal static void DeclineAll() {
+		void DeclineAll() {
 			if (MissionControl.Instance == null) {
 				return;
 			}
 			if (!MissionControl.Instance.toggleDisplayModeAvailable.isOn) {
-				Log ("You are not on the Available contracts");
+				Log ("You are not on the Available contracts", "QGUI");
 				return;
 			}
 			if (ContractSystem.Instance == null) {
@@ -109,7 +137,7 @@ namespace QuickContracts {
 				}
 			}
 			MissionControl.Instance.RebuildContractList ();
-			Log ("Decline all contracts");
+			Log ("Decline all contracts", "QGUI");
 		}
 	}
 }

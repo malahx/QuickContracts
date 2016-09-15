@@ -40,6 +40,13 @@ Delete the QuickContracts folder in your KSP/GameData folder.
 
 #### Changelog
 
+v1.10 - 2016.09.15
+* New: Re-added GUI,
+* Fix: Corrected the reputation lost message,
+* Fix: Enhanced the settings functions,
+* Fix: Deleted useless libraries.
+* Compiled against KSP 1.2.0.1479
+
 v1.05 - 2016.04.19
 * Compiled against KSP 1.1.0.1230
 
